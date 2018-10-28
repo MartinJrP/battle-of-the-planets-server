@@ -1,0 +1,41 @@
+{
+  "name": "battle-of-the-planets-server",
+  "version": "1.0.0",
+  "description": "The newton force battleground",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "ts-mocha test/*.spec.ts --inspect",
+    "test-watch": "ts-mocha test/*.spec.ts --inspect --watch --watch-extensions ts,tsx \"test/**/*.{ts,tsx}\" -R min",
+    "test-break": "ts-mocha --inspect-brk",
+    "serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts --inspect"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MartinJrP/battle-of-the-planets-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MartinJrP/battle-of-the-planets-server/issues"
+  },
+  "homepage": "https://github.com/MartinJrP/battle-of-the-planets-server#readme",
+  "dependencies": {
+    "@types/express": "^4.16.0",
+    "@types/node": "^10.12.0",
+    "@types/socket.io": "^1.4.38",
+    "express": "^4.16.4",
+    "node-code-generator": "^1.0.3",
+    "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.4",
+    "sinon": "^7.1.0",
+    "ts-mocha": "^2.0.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.3"
+  }
+}

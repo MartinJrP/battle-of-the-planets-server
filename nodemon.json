@@ -1,0 +1,6 @@
+{
+  "ignore": ["*.js"],
+  "events": {
+    "restart": "tsc"
+  }
+}
