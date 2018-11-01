@@ -18,7 +18,7 @@ describe('GameServer', function () {
       new GameSession('ABCDE'),
       new GameSession('GIJOE')
     ]
-    server = new GameServer()
+    server = new GameServer({} as SocketIO.Server)
     server.sessions = mockSessions
     socket = {
       join: function () {}
@@ -98,5 +98,6 @@ describe('GameServer', function () {
       })
     })
     
+    it('should emit a player-added event')
   })
 })

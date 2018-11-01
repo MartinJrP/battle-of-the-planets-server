@@ -1,22 +1,29 @@
 import express from 'express'
 import http from 'http'
 import socket from 'socket.io'
+import cors from 'cors'
 
 var app = express()
 var server = new http.Server(app)
-var io = socket(http);
+var io = socket(server);
 
 import GameServer from './GameObjects/GameServer';
-const gameServer = new GameServer()
+const gameServer = new GameServer(io)
 
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-});
+app.use(express.static('public'))
+app.use(cors({
+  origin: false
+}))
 
 io.on('connection', attatchSocketListeners);
 
-server.listen(3000, function(){
-  console.log('Listening on *:3000');
+let port: number | string = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
+server.listen(port, function(){
+  console.log('App listening on *:' + port);
+  console.log(`Socket Server listening on: ${ io.path() }`)
 });
 
 

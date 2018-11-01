@@ -3,9 +3,11 @@ import Player from './Player';
 
 export default class GameServer {
 
+  io: SocketIO.Server
   sessions: GameSession[]
 
-  constructor() {
+  constructor(io: SocketIO.Server) {
+    this.io = io
     this.sessions = []
 
     //console.log('Game Server Initialized')
@@ -33,6 +35,7 @@ export default class GameServer {
 
       socket.join(sessionId)
       acknowledgement({ username: playerName })
+      this.io.to(sessionId).emit('player-added', playerName)
       return
     }
     else {
