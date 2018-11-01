@@ -24,5 +24,6 @@ server.listen(3000, function(){
 function attatchSocketListeners(socket: socket.Socket) {
   console.log('User Connected');
 
-  socket.on('create-session', gameServer.createSession)
+  socket.on('create-session', (data, acknowledgement) => gameServer.createSession(socket, acknowledgement))
+  socket.on('join-session', (sessionId, acknowledgement) => gameServer.joinSession(sessionId, socket, acknowledgement))
 }

@@ -1,4 +1,5 @@
 import GameSession from './GameSession'
+import Player from './Player';
 
 export default class GameServer {
 
@@ -7,7 +8,7 @@ export default class GameServer {
   constructor() {
     this.sessions = []
 
-    console.log('Game Server Initialized')
+    //console.log('Game Server Initialized')
   }
 
   public createSession(socket: SocketIO.Socket, acknowledgement: (...args: any[]) => void) {
@@ -16,7 +17,28 @@ export default class GameServer {
     let session = new GameSession(newId)
   
     this.sessions.push(session)
+    socket.join(newId)
     acknowledgement(newId)
+  }
+
+  public joinSession(sessionId: string, socket: SocketIO.Socket, acknowledgement: (...args: any[]) => void) {
+    
+    let session = this.sessions.find((session) => session.id === sessionId)
+
+    if (session) {
+      let playerName = 'Player ' + (session.players.length + 1)
+      let player = new Player(playerName)
+
+      session.addPlayer(player)
+
+      socket.join(sessionId)
+      acknowledgement({ username: playerName })
+      return
+    }
+    else {
+      acknowledgement({ error: 'Session Not Found' })
+      return
+    }
   }
 
 }
