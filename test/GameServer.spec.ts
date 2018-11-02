@@ -4,13 +4,16 @@ import sinon from 'sinon'
 import GameServer from './../src/GameObjects/GameServer'
 import GameSession from './../src/GameObjects/GameSession'
 import Player from '../src/GameObjects/Player';
-import socket from 'socket.io';
+import socket_io from 'socket.io';
+import * as Errors from './../src/Errors'
+import * as Constants from './../src/Constants'
 
 describe('GameServer', function () {
 
   var mockSessions: GameSession[] = []
   var server: GameServer
   var socket: SocketIO.Socket
+  var io: SocketIO.Server
 
   beforeEach(function () {
     mockSessions = [
@@ -18,7 +21,9 @@ describe('GameServer', function () {
       new GameSession('ABCDE'),
       new GameSession('GIJOE')
     ]
-    server = new GameServer({} as SocketIO.Server)
+    io = socket_io()
+    //io = sinon.stub(socket_io())
+    server = new GameServer(io)
     server.sessions = mockSessions
     socket = {
       join: function () {}
@@ -83,10 +88,10 @@ describe('GameServer', function () {
 
     it('should return the auto-generated player name on sucess', function (done) {
       server.joinSession('GIJOE', socket, function (res) {
-        expect(res.username).to.equal('Player 1')
+        expect(res).to.deep.equal({ username: 'Player 1', num: 1 })
       })
       server.joinSession('GIJOE', socket, function (res) {
-        expect(res.username).to.equal('Player 2')
+        expect(res).to.deep.equal({ username: 'Player 2', num: 2 })
         done()
       })
     })
@@ -98,6 +103,37 @@ describe('GameServer', function () {
       })
     })
     
-    it('should emit a player-added event')
+    it('should emit a player-added event with the player\'s username to the correct room', function (done) {
+      let toStub = sinon.stub()
+      let emitSpy = sinon.spy()
+
+      let testSession = 'GIJOE'
+
+      server.io.to = toStub.returns({
+        emit: emitSpy
+      })
+
+      server.joinSession(testSession, socket, function (res) {
+        assert.isTrue(
+          toStub.calledWithExactly(testSession), 
+          'Called io.to with ' + toStub.args + 'instead of ' + testSession)
+
+        assert.isTrue(
+          emitSpy.calledWithExactly('player-added', res.username),
+          'Called io.to with ' + emitSpy.args + 'instead of \'player-added\'')
+        done()
+      })
+
+    })
+
+    it('should return an error if the max players per session has been reached', function (done) {
+      for (let i = 0; i < Constants.MAX_PLAYER_COUNT; i++) {
+        server.joinSession('GIJOE', socket, (response) => undefined)
+      }
+      server.joinSession('GIJOE', socket, function(response) {
+        expect(response.error).to.equal('Max player count reached.')
+        done()
+      })
+    })
   })
 })

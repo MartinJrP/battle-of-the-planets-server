@@ -28,15 +28,22 @@ export default class GameServer {
     let session = this.sessions.find((session) => session.id === sessionId)
 
     if (session) {
-      let playerName = 'Player ' + (session.players.length + 1)
+      let playerNum = session.players.length + 1
+      let playerName = 'Player ' + playerNum
       let player = new Player(playerName)
 
-      session.addPlayer(player)
+      try {
+        session.addPlayer(player)
 
-      socket.join(sessionId)
-      acknowledgement({ username: playerName })
-      this.io.to(sessionId).emit('player-added', playerName)
-      return
+        socket.join(sessionId)
+        this.io.to(sessionId).emit('player-added', playerName)
+        acknowledgement({ username: playerName, num: playerNum })
+        return
+      } catch (err) {
+        acknowledgement({ error: err.message })
+        return
+      }
+      
     }
     else {
       acknowledgement({ error: 'Session Not Found' })
