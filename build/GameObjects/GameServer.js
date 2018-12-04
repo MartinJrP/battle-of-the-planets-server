@@ -22,13 +22,20 @@ class GameServer {
     joinSession(sessionId, socket, acknowledgement) {
         let session = this.sessions.find((session) => session.id === sessionId);
         if (session) {
-            let playerName = 'Player ' + (session.players.length + 1);
-            let player = new Player_1.default(playerName);
-            session.addPlayer(player);
-            socket.join(sessionId);
-            acknowledgement({ username: playerName });
-            this.io.to(sessionId).emit('player-added', playerName);
-            return;
+            let playerNum = session.players.length + 1;
+            let playerName = 'Player ' + playerNum;
+            let player = new Player_1.default(playerName, playerNum);
+            try {
+                session.addPlayer(player);
+                socket.join(sessionId);
+                this.io.to(sessionId).emit('player-added', player);
+                acknowledgement(player);
+                return;
+            }
+            catch (err) {
+                acknowledgement({ error: err.message });
+                return;
+            }
         }
         else {
             acknowledgement({ error: 'Session Not Found' });

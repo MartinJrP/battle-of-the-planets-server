@@ -30,14 +30,14 @@ export default class GameServer {
     if (session) {
       let playerNum = session.players.length + 1
       let playerName = 'Player ' + playerNum
-      let player = new Player(playerName)
+      let player = new Player(playerName, playerNum)
 
       try {
         session.addPlayer(player)
 
         socket.join(sessionId)
-        this.io.to(sessionId).emit('player-added', playerName)
-        acknowledgement({ username: playerName, num: playerNum })
+        this.io.to(sessionId).emit('player-added', player)
+        acknowledgement(player)
         return
       } catch (err) {
         acknowledgement({ error: err.message })
