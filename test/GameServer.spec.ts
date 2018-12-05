@@ -66,7 +66,7 @@ describe('GameServer', function () {
     it('should add new player to the correct game session', function (done) {
       server.joinSession('GIJOE', socket, function(res) {
         let session = mockSessions[2]
-        let player = new Player(res.username)
+        let player = new Player(res.username, 1)
 
         expect(session.players).to.deep.include(player)
         done()
@@ -119,7 +119,7 @@ describe('GameServer', function () {
           'Called io.to with ' + toStub.args + 'instead of ' + testSession)
 
         assert.isTrue(
-          emitSpy.calledWithExactly('player-added', res.username),
+          emitSpy.calledWithExactly('player-added', res),
           'Called io.to with ' + emitSpy.args + 'instead of \'player-added\'')
         done()
       })
@@ -134,6 +134,40 @@ describe('GameServer', function () {
         expect(response.error).to.equal('Max player count reached.')
         done()
       })
+    })
+  })
+
+  describe('updateUsername', function () {
+    it('should update the username of the correct player', function () {
+      let session = mockSessions[0]
+
+      session.addPlayer(new Player('Player 1', 1))
+      session.addPlayer(new Player('Player 2', 2))
+      session.addPlayer(new Player('Player 3', 3))
+
+      server.updateUsername({ newUsername: 'Ariana', num: 2, sessionId: '12345' })
+      
+      let desiredPlayer = session.players.find(player => player.num === 2)
+      expect(desiredPlayer).to.deep.equal({ username: 'Ariana', num: 2})
+    })
+
+    // TODO: Check correct room was used.
+    it('should emit player-updated to the correct room with the new player info', function () {
+      let toStub = sinon.stub()
+      let emitSpy = sinon.spy()
+
+      let testSession = '12345'
+
+      server.io.to = toStub.returns({
+        emit: emitSpy
+      })
+
+      let session = mockSessions[0]
+
+      session.addPlayer(new Player('Player 2', 2))
+      server.updateUsername({ newUsername: 'Ariana', num: 2, sessionId: '12345' })
+
+      emitSpy.calledWith('player-updated', { username: 'Ariana', num: 2 }).should.be.true
     })
   })
 })

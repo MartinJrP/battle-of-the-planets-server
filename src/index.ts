@@ -33,4 +33,5 @@ function attatchSocketListeners(socket: socket.Socket) {
 
   socket.on('create-session', (data, acknowledgement) => gameServer.createSession(socket, acknowledgement))
   socket.on('join-session', (sessionId, acknowledgement) => gameServer.joinSession(sessionId, socket, acknowledgement))
+  socket.on('update-username', data => gameServer.updateUsername(data))
 }
