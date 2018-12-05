@@ -55,8 +55,6 @@ export default class GameServer {
     // This brings into question how players are stored.
     // A seperate store fosr players might help. Easier sorting. Less opporttunity for misuse (such as editing any player from any session once given the sessionId)
 
-    console.log(data)
-    console.log(this.sessions)
     // let player = this.playerWith(data.num, data.sessionId)
     let session = this.sessions.find(session => session.id === data.sessionId)
     let player = session.players.find(player => player.num === data.num)
@@ -67,15 +65,15 @@ export default class GameServer {
     this.io.to(data.sessionId).emit('player-updated', player)
   }
 
-  // Helper Methods
-  private sessionWith(id: string) {
-    return this.sessions.find(session => session.id === id)
-  }
+  public generateTeams(sessionId: string, acknowledgement: (...args: any[]) => void) {
+    let session = this.sessions.find(session => session.id === sessionId)
 
-  private playerWith(num: number, sessionId: string) {
-    let session = this.sessionWith(sessionId)
-    if (!session) return
+    try { 
+      session.generateRounds()
+      acknowledgement(session.rounds) 
+    } catch (e) {
+      acknowledgement(e)
+    }
 
-    return session.players.find(player => player.num === num)
   }
 }

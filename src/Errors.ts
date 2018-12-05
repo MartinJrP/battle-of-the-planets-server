@@ -1,1 +1,4 @@
 export const MAX_PLAYERS_REACHED = "MAX_PLAYERS_REACHED"
+export const NOT_ENOUGH_PLAYERS = {
+  code: "NOT_ENOUGH_PLAYERS"
+}
