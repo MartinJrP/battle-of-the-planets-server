@@ -45,8 +45,9 @@ export default class GameSession {
 
       let previousPlayer = shuffledPlayers[index - 1]
       let round = {
-        playerOne: player.num,
-        playerTwo: previousPlayer.num
+        num: this.rounds.length + 1,
+        teamOnePlayerNum: player.num,
+        teamTwoPlayerNum: previousPlayer.num
       }
 
       this.rounds.push(round)
@@ -55,8 +56,9 @@ export default class GameSession {
     if (this.players.length % 2 !== 0) {
       // Match up last player with first
       let bonusRound = {
-        playerOne: shuffledPlayers[shuffledPlayers.length - 1].num,
-        playerTwo: shuffledPlayers[0].num
+        num: this.rounds.length + 1,
+        teamOnePlayerNum: shuffledPlayers[shuffledPlayers.length - 1].num,
+        teamTwoPlayerNum: shuffledPlayers[0].num
       }
       this.rounds.push(bonusRound)
     }

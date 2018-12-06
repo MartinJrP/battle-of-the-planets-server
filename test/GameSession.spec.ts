@@ -46,7 +46,7 @@ describe('GameSession', function () {
     })
   })
 
-  describe.only('generateTeams', function () {
+  describe('generateTeams', function () {
     it('should generate the correct number of rounds for even number of players', function () {
       let session = mockSessions[0]
       
@@ -77,11 +77,9 @@ describe('GameSession', function () {
 
       session.rounds.forEach(round => {
         //console.log(round)
-        expect(round.playerOne !== round.playerTwo).to.be.true
+        expect(round.teamOnePlayerNum !== round.teamTwoPlayerNum).to.be.true
       })
     })
-    it('should not match up a single player more than twice')
-    it('should match the last player with the first player if there are an odd number of players')
     it('should throw an error if less than two people are in the game', function () {
       let session = mockSessions[0]
       
@@ -95,6 +93,8 @@ describe('GameSession', function () {
       })
       .should.throw(NOT_ENOUGH_PLAYERS.code)
     })
+    it('should not match up a single player more than twice')
+    it('should match the last player with the first player if there are an odd number of players')
   })
 
 })

@@ -1,4 +1,5 @@
 export default interface Round {
-  playerOne: number,
-  playerTwo: number
+  num: number
+  teamOnePlayerNum: number,
+  teamTwoPlayerNum: number
 }
