@@ -4,6 +4,7 @@ import Player from './Player'
 import * as Constants from './../Constants'
 import * as ERROR_NAME from './../Errors'
 import Round from './Round';
+import PlayerSocket from './PlayerSocket';
 
 /// Manages and individual GameSession instance.
 export default class GameSession {
@@ -14,12 +15,16 @@ export default class GameSession {
   // The players in enrolled in the game session
   players: Player[]
 
+  //
+  playerSockets: PlayerSocket[]
+
   // 
   rounds: Round[]
 
   constructor (id: string) {
     this.id = id
     this.players = []
+    this.playerSockets = []
     this.rounds = []
   }
 

@@ -136,7 +136,24 @@ describe('GameServer', function () {
       })
     })
 
-    
+    it('should add the player\'s socket information to the the playerSockets array.', function (done) {
+      let session = server.sessions.find(session => session.id === 'GIJOE')
+      let socket = {
+        id: 'test id'
+      } as SocketIO.Socket
+      let testPlayerSocket = {
+        id: socket.id,
+        num: 1
+      }
+
+      server.joinSession('GIJOE', socket, function(res) {
+        let session = mockSessions[2]
+        let player = new Player(res.username, 1)
+
+        expect(session.playerSockets).to.deep.include(testPlayerSocket)
+        done()
+      })
+    })
   })
 
   describe('updateUsername', function () {
@@ -171,5 +188,10 @@ describe('GameServer', function () {
 
       emitSpy.calledWith('player-updated', { username: 'Ariana', num: 2 }).should.be.true
     })
+  })
+
+  describe('generateTeams', function () {
+    it('should send an acknowledgement to the client with the generated teams')
+    it('should send emit a teams-generated to each player about their team')
   })
 })

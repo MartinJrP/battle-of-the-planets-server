@@ -34,6 +34,10 @@ export default class GameServer {
 
       try {
         session.addPlayer(player)
+        session.playerSockets.push({
+          id: socket.id,
+          num: player.num
+        })
 
         socket.join(sessionId)
         this.io.to(sessionId).emit('player-added', player)
@@ -71,6 +75,16 @@ export default class GameServer {
     try { 
       session.generateRounds()
       acknowledgement(session.rounds) 
+      
+      session.rounds.forEach(round => {
+        let playerOneSocket = session.playerSockets.find(socket => socket.num === round.teamOnePlayerNum)
+        let playerTwoSocket = session.playerSockets.find(socket => socket.num === round.teamTwoPlayerNum)
+
+        this.io
+          .to(playerOneSocket.id)
+          .to(playerTwoSocket.id)
+          .emit('teams-generated', round)
+      })
     } catch (e) {
       acknowledgement(e)
     }
