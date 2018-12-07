@@ -5,6 +5,7 @@ import * as Constants from './../Constants'
 import * as ERROR_NAME from './../Errors'
 import Round from './Round';
 import PlayerSocket from './PlayerSocket';
+import RoundSession from './RoundSession';
 
 /// Manages and individual GameSession instance.
 export default class GameSession {
@@ -20,6 +21,8 @@ export default class GameSession {
 
   // 
   rounds: Round[]
+
+  currentRoundSession: RoundSession
 
   constructor (id: string) {
     this.id = id
@@ -67,6 +70,13 @@ export default class GameSession {
       }
       this.rounds.push(bonusRound)
     }
+  }
+
+  public setupNextRound() {
+    let nextRound = this.rounds.find(round => !round.completed)
+    let roundSession = new RoundSession(nextRound)
+
+    this.currentRoundSession = roundSession
   }
 
   public static GenerateNewGameId(currentSessions: GameSession[]): string {

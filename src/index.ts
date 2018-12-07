@@ -35,4 +35,7 @@ function attatchSocketListeners(socket: socket.Socket) {
   socket.on('join-session', (sessionId, acknowledgement) => gameServer.joinSession(sessionId, socket, acknowledgement))
   socket.on('update-username', data => gameServer.updateUsername(data))
   socket.on('generate-teams', (sessionId, acknowledgement) => gameServer.generateTeams(sessionId, acknowledgement))
+
+  // Gameplay API
+  socket.on('prepare-next-round', (sessionId, acknowledgement) => gameServer.prepareNextRound(sessionId, acknowledgement))
 }

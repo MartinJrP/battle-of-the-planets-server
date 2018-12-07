@@ -1,5 +1,8 @@
 export default interface Round {
-  num: number
-  teamOnePlayerNum: number,
-  teamTwoPlayerNum: number
+  num: Number
+  teamOnePlayerNum: Number,
+  teamTwoPlayerNum: Number,
+
+  completed?: Boolean,
+  winningTeam?: Number
 }

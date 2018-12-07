@@ -90,4 +90,22 @@ export default class GameServer {
     }
 
   }
+
+  /// Prepares the next session to begin the round. Asks users if they are read to begin.
+  public prepareNextRound(sessionId: string, acknowledgement: (...args: any[]) => void) {
+    let session = this.sessions.find(session => session.id === sessionId)
+    session.setupNextRound()
+
+    let round = session.currentRoundSession.round
+
+    let playerOneSocket = session.playerSockets.find(socket => socket.num === round.teamOnePlayerNum)
+    let playerTwoSocket = session.playerSockets.find(socket => socket.num === round.teamTwoPlayerNum)
+
+    this.io
+      .to(playerOneSocket.id)
+      .to(playerTwoSocket.id)
+      .emit('prepare-to-play')
+
+    acknowledgement(session.currentRoundSession.round.num)
+  }
 }
