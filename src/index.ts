@@ -1,7 +1,6 @@
 import express from 'express'
 import http from 'http'
 import socket from 'socket.io'
-import cors from 'cors'
 
 var app = express()
 var server = new http.Server(app)
@@ -9,11 +8,6 @@ var io = socket(server);
 
 import GameServer from './GameObjects/GameServer';
 const gameServer = new GameServer(io)
-
-app.use(express.static('public'))
-app.use(cors({
-  origin: false
-}))
 
 io.on('connection', attatchSocketListeners);
 
