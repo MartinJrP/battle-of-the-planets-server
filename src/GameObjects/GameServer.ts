@@ -150,4 +150,18 @@ export default class GameServer {
     
     acknowledgement(question)
   }
+
+  public beginAcceptingResponses(sessionId: string) {
+    let session = this.sessions.find(session => session.id === sessionId)
+    let roundSession = session.currentRoundSession
+    let round = roundSession.round
+
+    let playerOneSocket = session.playerSockets.find(socket => socket.num === round.teamOnePlayerNum)
+    let playerTwoSocket = session.playerSockets.find(socket => socket.num === round.teamTwoPlayerNum)
+
+    this.io
+      .to(playerOneSocket.id)
+      .to(playerTwoSocket.id)
+      .emit('allow-answers')
+  }
 }

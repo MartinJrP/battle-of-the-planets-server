@@ -34,4 +34,5 @@ function attatchSocketListeners(socket: socket.Socket) {
   socket.on('prepare-next-round', (sessionId, acknowledgement) => gameServer.prepareNextRound(sessionId, acknowledgement))
   socket.on('player-ready', data => gameServer.setPlayerIsReady(data))
   socket.on('dispense-question', (sessionId, acknowledgement) => gameServer.dispenseQuestion(sessionId, acknowledgement))
+  socket.on('begin-accepting-responses', sessionId => gameServer.beginAcceptingResponses(sessionId))
 }
