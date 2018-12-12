@@ -83,7 +83,7 @@ export default class GameServer {
         this.io
           .to(playerOneSocket.id)
           .to(playerTwoSocket.id)
-          .emit('teams-generated', round)
+          .emit('teams-generated', { round: round, players: session.players })
       })
     } catch (e) {
       acknowledgement(e)
