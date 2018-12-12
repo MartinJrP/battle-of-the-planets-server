@@ -108,4 +108,27 @@ export default class GameServer {
 
     acknowledgement(session.currentRoundSession.round.num)
   }
+
+  /// Declares that the player for a current round is ready to begin.
+  public setPlayerIsReady(data: { sessionId: string, playerNum: number}) {
+    let session = this.sessions.find(session => session.id === data.sessionId)
+    let roundSession = session.currentRoundSession
+
+    let teamOnePlayerNum = roundSession.round.teamOnePlayerNum
+    let teamTwoPlayerNum = roundSession.round.teamTwoPlayerNum
+
+    if (data.playerNum === teamOnePlayerNum) {
+      roundSession.teamOneReady = true
+    } 
+    else if (data.playerNum === teamTwoPlayerNum) {
+      roundSession.teameTwoReady = true
+    } 
+    else { return }
+
+    this.io.emit('player-ready', data.playerNum)
+
+    if (roundSession.bothPlayersReady()) {
+      // Begin the game!
+    }
+  }
 }

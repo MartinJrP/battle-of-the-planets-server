@@ -16,6 +16,4 @@ export default class RoundSession {
     return this.teamOneReady && this.teameTwoReady
   }
 
-  
-
 }
