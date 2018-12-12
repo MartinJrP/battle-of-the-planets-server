@@ -60,6 +60,8 @@ describe('GameServer', function () {
         done()
       })
     })
+
+    it('should add the display socket id to the session')
   })
 
   describe('joinSession', function () {

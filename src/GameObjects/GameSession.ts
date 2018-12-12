@@ -19,6 +19,8 @@ export default class GameSession {
   //
   playerSockets: PlayerSocket[]
 
+  displaySocketId: string
+
   // 
   rounds: Round[]
 

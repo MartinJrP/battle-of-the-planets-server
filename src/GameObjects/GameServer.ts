@@ -17,7 +17,8 @@ export default class GameServer {
     // TODO: Consider how vital it is to check for session with existing Id
     let newId = GameSession.GenerateNewGameId(this.sessions)
     let session = new GameSession(newId)
-  
+    session.displaySocketId = socket.id
+
     this.sessions.push(session)
     socket.join(newId)
     acknowledgement(newId)
@@ -113,9 +114,10 @@ export default class GameServer {
   public setPlayerIsReady(data: { sessionId: string, playerNum: number}) {
     let session = this.sessions.find(session => session.id === data.sessionId)
     let roundSession = session.currentRoundSession
+    let round = roundSession.round
 
-    let teamOnePlayerNum = roundSession.round.teamOnePlayerNum
-    let teamTwoPlayerNum = roundSession.round.teamTwoPlayerNum
+    let teamOnePlayerNum = round.teamOnePlayerNum
+    let teamTwoPlayerNum = round.teamTwoPlayerNum
 
     if (data.playerNum === teamOnePlayerNum) {
       roundSession.teamOneReady = true
@@ -128,7 +130,14 @@ export default class GameServer {
     this.io.emit('player-ready', data.playerNum)
 
     if (roundSession.bothPlayersReady()) {
-      // Begin the game!
+      let playerOneSocket = session.playerSockets.find(socket => socket.num === round.teamOnePlayerNum)
+      let playerTwoSocket = session.playerSockets.find(socket => socket.num === round.teamTwoPlayerNum)
+
+      this.io
+        .to(playerOneSocket.id)
+        .to(playerTwoSocket.id)
+        .to(session.displaySocketId)
+        .emit('begin-round')
     }
   }
 }
