@@ -1,0 +1,68 @@
+[
+  {
+    "question": "What tag can be used to insert a line break or blank line in an HTML document?",
+    "category": "HTML",
+    "answer": 0,
+    "options": [
+      "<br></br>",
+      "<head></head>",
+      "<title></title>",
+      "<body></body>"
+    ]
+  },
+  {
+    "question": "The link element must go inside the ____ section of an HTML document or page.",
+    "category": "CSS",
+    "answer": 3,
+    "options": [
+      "Footer",
+      "Body",
+      "Paragraph",
+      "Head"
+    ]
+  },
+  {
+    "question": "The jQuery DOM manipulation method that returns or declares the value of form fields is ____.",
+    "category": "jQuery",
+    "answer": 0,
+    "options": [
+      "val()",
+      "surface()",
+      "html()",
+      "text()"
+    ]
+  },
+  {
+    "question": "What is the correct chunk used to signify the start of a PHP code script?",
+    "category": "PHP",
+    "answer": 1,
+    "options": [
+      "://",
+      "<?php",
+      "()",
+      "[\""
+    ]
+  },
+  {
+    "question": "What is the type of statement called that is used to remove records in a table?",
+    "category": "SQL",
+    "answer": 0,
+    "options": [
+      "DELETE",
+      "RECALL",
+      "ORDER",
+      "REMEMBER"
+    ]
+  },
+  {
+    "question": "Swift is primarily used to develop content for ______ devices.",
+    "category": "Swift",
+    "answer": 2,
+    "options": [
+      "Microsoft",
+      "Bungie",
+      "Apple",
+      "Linux"
+    ]
+  }
+]

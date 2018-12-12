@@ -127,7 +127,7 @@ export default class GameServer {
     } 
     else { return }
 
-    this.io.emit('player-ready', data.playerNum)
+    this.io.to(session.displaySocketId).emit('player-ready', data.playerNum)
 
     if (roundSession.bothPlayersReady()) {
       let playerOneSocket = session.playerSockets.find(socket => socket.num === round.teamOnePlayerNum)
@@ -139,5 +139,15 @@ export default class GameServer {
         .to(session.displaySocketId)
         .emit('begin-round')
     }
+  }
+
+  public dispenseQuestion(sessionId: string, acknowledgement: (...args: any[]) => void) {
+    let session = this.sessions.find(session => session.id === sessionId)
+    let roundSession = session.currentRoundSession
+    let round = roundSession.round
+
+    let question = session.questions.find((question, index) => index === round.questionIndex)
+    
+    acknowledgement(question)
   }
 }

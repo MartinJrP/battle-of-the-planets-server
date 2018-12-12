@@ -95,6 +95,12 @@ describe('GameSession', function () {
     })
     it('should not match up a single player more than twice')
     it('should match the last player with the first player if there are an odd number of players')
+
+    it('should prepare questions for each round')
+
+    it('should add a questionIndex for each round')
+
+    it('should have the right amount of questions')
   })
 
 })

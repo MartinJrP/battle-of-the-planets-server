@@ -32,5 +32,6 @@ function attatchSocketListeners(socket: socket.Socket) {
 
   // Gameplay API
   socket.on('prepare-next-round', (sessionId, acknowledgement) => gameServer.prepareNextRound(sessionId, acknowledgement))
-  socket.on('player-ready', data => gameServer.setPlayerIsReady(data) )
+  socket.on('player-ready', data => gameServer.setPlayerIsReady(data))
+  socket.on('dispense-question', (sessionId, acknowledgement) => gameServer.dispenseQuestion(sessionId, acknowledgement))
 }

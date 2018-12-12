@@ -3,6 +3,7 @@ export default interface Round {
   teamOnePlayerNum: Number,
   teamTwoPlayerNum: Number,
 
+  questionIndex: Number
   completed?: Boolean,
   winningTeam?: Number
 }

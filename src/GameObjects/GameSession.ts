@@ -6,6 +6,7 @@ import * as ERROR_NAME from './../Errors'
 import Round from './Round';
 import PlayerSocket from './PlayerSocket';
 import RoundSession from './RoundSession';
+import Question from './Question';
 
 /// Manages and individual GameSession instance.
 export default class GameSession {
@@ -16,13 +17,13 @@ export default class GameSession {
   // The players in enrolled in the game session
   players: Player[]
 
-  //
   playerSockets: PlayerSocket[]
 
   displaySocketId: string
 
-  // 
   rounds: Round[]
+
+  questions: Question[]
 
   currentRoundSession: RoundSession
 
@@ -31,6 +32,7 @@ export default class GameSession {
     this.players = []
     this.playerSockets = []
     this.rounds = []
+    this.questions = []
   }
 
 
@@ -56,6 +58,7 @@ export default class GameSession {
       let previousPlayer = shuffledPlayers[index - 1]
       let round = {
         num: this.rounds.length + 1,
+        questionIndex: this.rounds.length,
         teamOnePlayerNum: player.num,
         teamTwoPlayerNum: previousPlayer.num
       }
@@ -67,11 +70,14 @@ export default class GameSession {
       // Match up last player with first
       let bonusRound = {
         num: this.rounds.length + 1,
+        questionIndex: this.rounds.length,
         teamOnePlayerNum: shuffledPlayers[shuffledPlayers.length - 1].num,
         teamTwoPlayerNum: shuffledPlayers[0].num
       }
       this.rounds.push(bonusRound)
     }
+
+    this.generateQuestions()
   }
 
   public setupNextRound() {
@@ -94,7 +100,17 @@ export default class GameSession {
   }
 
   // Helpers
-  private shuffle(array: Array<Player>) {
+  private generateQuestions() {
+    let roundsEndIndex = this.rounds.length
+    let questionsLibrary = require('./../questions.json') as Question[]
+    
+    let shuffledQuestions = this.shuffle(questionsLibrary)
+    let question = shuffledQuestions.filter((question, index) => index < roundsEndIndex ? question : undefined)
+
+    this.questions = question
+  }
+
+  private shuffle<T>(array: Array<T>) {
     // https://stackoverflow.com/a/2450976/1940440
     var currentIndex = array.length
     var temporaryValue
