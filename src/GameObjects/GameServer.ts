@@ -1,5 +1,7 @@
 import GameSession from './GameSession'
 import Player from './Player';
+import Round from './Round';
+import RoundSession from './RoundSession';
 
 export default class GameServer {
 
@@ -163,5 +165,60 @@ export default class GameServer {
       .to(playerOneSocket.id)
       .to(playerTwoSocket.id)
       .emit('allow-answers')
+  }
+
+  // Should be called by a client when the attempt to answer a question. The server evaluates who clicked first, and grants access to the first click.
+  public requestToAnswerQuestion(data: { sessionId: string, playerNum: number, timestamp: number}) {
+    
+    let session = this.sessions.find(session => session.id === data.sessionId)
+    let roundSession = session.currentRoundSession
+    let round = roundSession.round
+
+    // Save timestamp to server.
+    let responseIsFromTeamOne = data.playerNum === round.teamOnePlayerNum
+    console.log(`[Game ${session.id}]: Request to respond from team ${responseIsFromTeamOne ? 1 : 2}`)
+
+    if (responseIsFromTeamOne) roundSession.teamOneResponseTimestamp = data.timestamp
+    else if (!responseIsFromTeamOne) roundSession.teamTwoResponseTimestamp = data.timestamp
+    else return
+
+    // If both users tap, invalidate the timeout and evaluate who should respond first.
+    let teamToRespond = roundSession.teamWhoShouldRespond()
+    if (!teamToRespond) {
+      console.log(`[Game ${session.id}]: Both teams yet to respond. Setting Timeout.`)
+      session.responseWaiter = setTimeout( () => {
+        this.notifyClientsOfResponder(data.sessionId)
+      }, 2000)
+    } else {
+      console.log(`[Game ${session.id}]: Team ${ teamToRespond } should respond`)
+      this.notifyClientsOfResponder(data.sessionId, teamToRespond)
+    }
+  }
+
+  private notifyClientsOfResponder (sessionId: string, responder?: number) {
+    let session = this.sessions.find(session => session.id === sessionId)
+    let roundSession = session.currentRoundSession
+    let round = roundSession.round
+
+    clearTimeout(session.responseWaiter)
+    session.responseWaiter = undefined
+    
+    let playerOneSocket = session.playerSockets.find(socket => socket.num === round.teamOnePlayerNum)
+    let playerTwoSocket = session.playerSockets.find(socket => socket.num === round.teamTwoPlayerNum)
+
+    let teamToRespond
+    if (!responder) {
+      teamToRespond = roundSession.teamOneResponseTimestamp ? 1 : 2
+      console.log(`[Game ${session.id}]: Setting from timeout. Team ${ teamToRespond } plays`)
+    } else {
+      teamToRespond = responder
+      console.log(`[Game ${session.id}]: Evaluating both players. Team ${ teamToRespond } plays`)
+    }
+
+    this.io
+      .to(playerOneSocket.id)
+      .to(playerTwoSocket.id)
+      .to(session.displaySocketId)
+      .emit('player-can-respond', teamToRespond)
   }
 }

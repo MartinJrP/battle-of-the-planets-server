@@ -27,6 +27,9 @@ export default class GameSession {
 
   currentRoundSession: RoundSession
 
+  // Used to track the 3 second wait period for calculating who should be allowed to answer a question.
+  responseWaiter?: NodeJS.Timeout = undefined
+
   constructor (id: string) {
     this.id = id
     this.players = []
