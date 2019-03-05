@@ -8,7 +8,7 @@
     "test-watch": "ts-mocha test/*.spec.ts --inspect --watch --watch-extensions ts,tsx \"test/**/*.{ts,tsx}\" -R min",
     "test-break": "ts-mocha --inspect-brk",
     "serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts --inspect",
-    "postinstall": "tsc"
+    "postinstall": "tsc && cp src/questions.json build"
   },
   "repository": {
     "type": "git",
