@@ -78,6 +78,7 @@ export default class GameServer {
 
     try { 
       session.generateRounds()
+      console.log(session)
       acknowledgement(session.rounds) 
       
       session.rounds.forEach(round => {
@@ -90,6 +91,7 @@ export default class GameServer {
           .emit('teams-generated', { round: round, players: session.players })
       })
     } catch (e) {
+      console.error(e)
       acknowledgement(e)
     }
 
