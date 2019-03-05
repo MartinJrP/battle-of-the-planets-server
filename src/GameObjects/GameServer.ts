@@ -74,6 +74,7 @@ export default class GameServer {
 
   public generateTeams(sessionId: string, acknowledgement: (...args: any[]) => void) {
     let session = this.sessions.find(session => session.id === sessionId)
+    let self = this
 
     try { 
       session.generateRounds()
@@ -83,7 +84,7 @@ export default class GameServer {
         let playerOneSocket = session.playerSockets.find(socket => socket.num === round.teamOnePlayerNum)
         let playerTwoSocket = session.playerSockets.find(socket => socket.num === round.teamTwoPlayerNum)
 
-        this.io
+        self.io
           .to(playerOneSocket.id)
           .to(playerTwoSocket.id)
           .emit('teams-generated', { round: round, players: session.players })
