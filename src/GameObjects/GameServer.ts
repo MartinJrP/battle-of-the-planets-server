@@ -171,6 +171,33 @@ export default class GameServer {
   }
 
   // Should be called by a client when the attempt to answer a question. The server evaluates who clicked first, and grants access to the first click.
+  // public requestToAnswerQuestion(data: { sessionId: string, playerNum: number, timestamp: number}) {
+    
+  //   let session = this.sessions.find(session => session.id === data.sessionId)
+  //   let roundSession = session.currentRoundSession
+  //   let round = roundSession.round
+
+  //   // Save timestamp to server.
+  //   let responseIsFromTeamOne = data.playerNum === round.teamOnePlayerNum
+  //   console.log(`[Game ${session.id}]: Request to respond from team ${responseIsFromTeamOne ? 1 : 2}`)
+
+  //   if (responseIsFromTeamOne) roundSession.teamOneResponseTimestamp = data.timestamp
+  //   else if (!responseIsFromTeamOne) roundSession.teamTwoResponseTimestamp = data.timestamp
+  //   else return
+
+  //   // If both users tap, invalidate the timeout and evaluate who should respond first.
+  //   let teamToRespond = roundSession.teamWhoShouldRespond()
+  //   if (!teamToRespond) {
+  //     console.log(`[Game ${session.id}]: Both teams yet to respond. Setting Timeout.`)
+  //     session.responseWaiter = setTimeout( () => {
+  //       this.notifyClientsOfResponder(data.sessionId)
+  //     }, 2000)
+  //   } else {
+  //     console.log(`[Game ${session.id}]: Team ${ teamToRespond } should respond`)
+  //     this.notifyClientsOfResponder(data.sessionId, teamToRespond)
+  //   }
+  // }
+
   public requestToAnswerQuestion(data: { sessionId: string, playerNum: number, timestamp: number}) {
     
     let session = this.sessions.find(session => session.id === data.sessionId)
@@ -188,10 +215,10 @@ export default class GameServer {
     // If both users tap, invalidate the timeout and evaluate who should respond first.
     let teamToRespond = roundSession.teamWhoShouldRespond()
     if (!teamToRespond) {
-      console.log(`[Game ${session.id}]: Both teams yet to respond. Setting Timeout.`)
+      console.log(`[Game ${session.id}]: Waiting for one team to respond. Setting Timeout.`)
       session.responseWaiter = setTimeout( () => {
         this.notifyClientsOfResponder(data.sessionId)
-      }, 2000)
+      }, 1000)
     } else {
       console.log(`[Game ${session.id}]: Team ${ teamToRespond } should respond`)
       this.notifyClientsOfResponder(data.sessionId, teamToRespond)

@@ -25,7 +25,7 @@ export default class RoundSession {
   public teamWhoShouldRespond (): number | undefined {
     if (!this.bothPlayersSubmittedTimestamps()) return
 
-    return this.teamOneResponseTimestamp < this.teamTwoResponseTimestamp ? 1 : 2
+    return this.teamOneResponseTimestamp > this.teamTwoResponseTimestamp ? 1 : 2
   }
 
   private bothPlayersSubmittedTimestamps () {
