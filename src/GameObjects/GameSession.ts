@@ -98,6 +98,23 @@ export default class GameSession {
     return true
   }
 
+  public winningTeam(): number {
+    let teamOneWins = 0
+    let teamTwoWins = 0
+    for (let i = 0; i < this.rounds.length; i++) {
+      teamOneWins += this.rounds[i].winningTeam == 1 ? 1 : 0
+      teamTwoWins += this.rounds[i].winningTeam == 2 ? 1 : 0
+    }
+
+    if (teamOneWins == teamTwoWins) {
+      return -1
+    } else if (teamOneWins > teamTwoWins) {
+      return 1
+    } else {
+      return 2
+    }
+  }
+
   public static GenerateNewGameId(currentSessions: GameSession[]): string {
     let generator = new CodeGenerator()
     let pattern = '#####'

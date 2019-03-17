@@ -103,7 +103,7 @@ export default class GameServer {
     let isGameEnd = !session.setupNextRound()
 
     if (isGameEnd) {
-      this.endGame()
+      this.endGame(sessionId)
       return
     }
 
@@ -247,8 +247,9 @@ export default class GameServer {
 
   /* ---------------- Private Helpers -------------------- */
 
-  private endGame() {
-    this.io.emit('end-game')
+  private endGame(sessionId: string) {
+    let session = this.sessions.find(session => session.id === sessionId)
+    this.io.emit('end-game', session.winningTeam())
   }
 
   private notifyClientsOfResponder (sessionId: string, responder?: number) {
