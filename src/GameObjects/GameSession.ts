@@ -27,7 +27,7 @@ export default class GameSession {
 
   currentRoundSession: RoundSession
 
-  // Used to track the 3 second wait period for calculating who should be allowed to answer a question.
+  // Used to track the 1 second wait period for calculating who should be allowed to answer a question.
   responseWaiter?: NodeJS.Timeout = undefined
 
   constructor (id: string) {
@@ -83,11 +83,19 @@ export default class GameSession {
     this.generateQuestions()
   }
 
-  public setupNextRound() {
+  // Queues the next round. Returns false if the game should end.
+  public setupNextRound(): boolean {
     let nextRound = this.rounds.find(round => !round.completed)
-    let roundSession = new RoundSession(nextRound)
-
+    if (!nextRound) {
+      console.log("Game End")
+      return false
+    }
+    
+    let question = this.questions.find((question, index) => index === nextRound.questionIndex)
+    let roundSession = new RoundSession(nextRound, question)
     this.currentRoundSession = roundSession
+    
+    return true
   }
 
   public static GenerateNewGameId(currentSessions: GameSession[]): string {
@@ -105,7 +113,7 @@ export default class GameSession {
   // Helpers
   private generateQuestions() {
     let roundsEndIndex = this.rounds.length
-    let questionsLibrary = require('./../questions.json') as Question[]
+    let questionsLibrary = require(__dirname + '/../questions.json') as Question[]
     
     let shuffledQuestions = this.shuffle(questionsLibrary)
     let question = shuffledQuestions.filter((question, index) => index < roundsEndIndex ? question : undefined)
