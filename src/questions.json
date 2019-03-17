@@ -1,68 +1,68 @@
 [
   {
-    "question": "What tag can be used to insert a line break or blank line in an HTML document?",
-    "category": "HTML",
+    "question": "What is the largest planet in the solar system?",
+    "category": "Solar System",
     "answer": 0,
     "options": [
-      "<br></br>",
-      "<head></head>",
-      "<title></title>",
-      "<body></body>"
+      "Jupiter",
+      "Neptune",
+      "Earth",
+      "Saturn"
     ]
   },
   {
-    "question": "The link element must go inside the ____ section of an HTML document or page.",
-    "category": "CSS",
+    "question": "Which planet is closest in size to the earth?",
+    "category": "Solar System",
     "answer": 3,
     "options": [
-      "Footer",
-      "Body",
-      "Paragraph",
-      "Head"
+      "Mars",
+      "Mercury",
+      "Uranus",
+      "Venus"
     ]
   },
   {
-    "question": "The jQuery DOM manipulation method that returns or declares the value of form fields is ____.",
-    "category": "jQuery",
+    "question": "Which planet is most likely to support life after the Earth?",
+    "category": "Solar System",
     "answer": 0,
     "options": [
-      "val()",
-      "surface()",
-      "html()",
-      "text()"
+      "Mars",
+      "Jupiter",
+      "Pluto",
+      "Neptune"
     ]
   },
   {
-    "question": "What is the correct chunk used to signify the start of a PHP code script?",
-    "category": "PHP",
+    "question": "What is the hottest planet?",
+    "category": "Solar System",
     "answer": 1,
     "options": [
-      "://",
-      "<?php",
-      "()",
-      "[\""
+      "Saturn",
+      "Venus",
+      "Mars",
+      "Earth"
     ]
   },
   {
-    "question": "What is the type of statement called that is used to remove records in a table?",
-    "category": "SQL",
+    "question": "Which planet is closest to the sun?",
+    "category": "Solar System",
     "answer": 0,
     "options": [
-      "DELETE",
-      "RECALL",
-      "ORDER",
-      "REMEMBER"
+      "Mercury",
+      "Venus",
+      "Earth",
+      "Jupiter"
     ]
   },
   {
-    "question": "Swift is primarily used to develop content for ______ devices.",
-    "category": "Swift",
+    "question": "What is the only planet that spins sideways?",
+    "category": "Solar System",
     "answer": 2,
     "options": [
-      "Microsoft",
-      "Bungie",
-      "Apple",
-      "Linux"
+      "Earth",
+      "Mars",
+      "Uranus",
+      "Saturn"
     ]
   }
 ]
